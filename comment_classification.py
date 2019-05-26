@@ -27,3 +27,31 @@ test_df = pd.read_csv(TEST_DATA_FILE)
 
 print("A quick view of training set")
 train_df.head()
+
+
+#Get ratio of current dataset
+def get_pos_ratio(data):
+    return data.sum() / len(data)
+
+pos_ratio = []
+for col in ['toxic', 'severe_toxic', 'obscene', 'threat', 'insult', 'identity_hate']:
+    pos_ratio.append(get_pos_ratio(train_df[col]))
+
+
+# Plot occurances
+
+x = train_df.iloc[:,2:].sum()
+
+plt.figure(figsize=(8,4))
+ax= sns.barplot(x.index, x.values, alpha=0.8)
+plt.title("# per class")
+plt.ylabel('# of Occurrences', fontsize=12)
+plt.xlabel('Type ', fontsize=12)
+
+rects = ax.patches
+labels = x.values
+for rect, label in zip(rects, labels):
+    height = rect.get_height()
+    ax.text(rect.get_x() + rect.get_width()/2, height + 5, label, ha='center', va='bottom')
+
+plt.show()
